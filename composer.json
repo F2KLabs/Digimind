@@ -15,7 +15,7 @@
   },
   "autoload": {
     "psr-4": {
-      "F2klabs\\Digimind\\": "src",
+      "F2klabs\\Digimind\\": "src"
     }
   }
 }
