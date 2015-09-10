@@ -15,7 +15,8 @@ class DigimindServiceProvider extends ServiceProvider
     {
         $this->publishes(array(__DIR__.'/../config/config.php'=> config_path('digimind.php')));
 
-        require __DIR__ . '/../vendor/autoload.php';
+        if($_ENV['workbench'] == TRUE)
+            require __DIR__ . '/../vendor/autoload.php';
     }
 
     /**
