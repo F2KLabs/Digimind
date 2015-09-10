@@ -10,16 +10,15 @@ class WhenGraph extends Response{
         $contents = $this->getContents();
         $values = $contents->series[0]->values;
 
-        $result = [];
+        $graphData = [];
 
         foreach($values as $dataPoint)
         {
             $time = Carbon::parse($dataPoint->time);
 
-            array_push($result, [$time->timestamp, $dataPoint->count]);
+            array_push($graphData, [$time->timestamp * 1000, $dataPoint->count]);
         }
 
-        $graphData = array_reverse($result);
         $stats = $this->getChartStats($graphData);
 
         return ['stats'=>$stats, "graphData"=>$graphData];
@@ -27,8 +26,8 @@ class WhenGraph extends Response{
 
     protected function getChartStats(Array $data)
     {
-        $minimum = PHP_INT_MAX;
-        $maximum = 0;
+        $maximum = PHP_INT_MAX;
+        $minimum = 0;
         $average = 0;
         $total = 0;
 
