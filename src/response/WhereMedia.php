@@ -13,6 +13,17 @@ class WhereMedia extends Response{
 
     public function toFlot()
     {
-        return;
+        $series = $this->contents->series;
+        $graphData = [];
+        $total = 0;
+        foreach ($series as $dataPoint)
+        {
+            $graphData[$dataPoint->title] = $dataPoint->values[0]->count;
+            $total += $dataPoint->values[0]->count;
+        }
+
+        $graphData['total'] = $total;
+
+        return $graphData;
     }
 }
