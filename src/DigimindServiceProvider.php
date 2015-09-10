@@ -15,7 +15,7 @@ class DigimindServiceProvider extends ServiceProvider
     {
         $this->publishes(array(__DIR__.'/../config/config.php'=> config_path('digimind.php')));
 
-        if($_ENV['workbench'] == TRUE)
+        if(isset($_ENV['f2k.workbench']))
             require __DIR__ . '/../vendor/autoload.php';
     }
 
