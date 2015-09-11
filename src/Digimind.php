@@ -9,6 +9,7 @@
 namespace F2klabs\Digimind;
 
 use F2klabs\Digimind\request\Request;
+use F2klabs\Digimind\response\Mentions;
 use F2klabs\Digimind\response\WhatClassifications;
 use F2klabs\Digimind\response\WhatConcept;
 use F2klabs\Digimind\response\WhenGraph;
@@ -28,8 +29,7 @@ class Digimind {
 
     public function mentions($options = [])
     {
-        $response = $this->_makeRequest('mentions', $options);
-        return json_decode($response->getBody()->getContents());
+        return new Mentions($this->_makeRequest('mentions', $options));
     }
 
     /**

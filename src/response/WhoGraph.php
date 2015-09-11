@@ -14,6 +14,17 @@ class WhoGraph extends Response{
 
     public function toFlot()
     {
-        return;
+        dd($this->contents);
+    }
+
+    public function influencersTable()
+    {
+        $dataPoints = [];
+        foreach($this->contents->series as $row)
+        {
+            array_push($dataPoints, $row->values[0]);
+        }
+
+        return array_reverse($dataPoints);
     }
 }
