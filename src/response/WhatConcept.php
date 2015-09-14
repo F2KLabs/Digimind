@@ -19,4 +19,16 @@ class WhatConcept extends Response{
         return $this->contents;
     }
 
+    public function hashtags()
+    {
+        $i = 0;
+        $dataPoints = [];
+        foreach($this->contents->series as $row)
+        {
+            array_push($dataPoints, ["rank"=>$i, "hashtag"=>$row->title, "count"=>$row->values[0]->count]);
+        }
+
+        return $dataPoints;
+    }
+
 }
