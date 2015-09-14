@@ -26,6 +26,7 @@ class WhatConcept extends Response{
         foreach($this->contents->series as $row)
         {
             array_push($dataPoints, ["rank"=>$i, "hashtag"=>$row->title, "count"=>$row->values[0]->count]);
+            $i++;
         }
 
         return $dataPoints;
