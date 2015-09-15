@@ -9,6 +9,7 @@
 namespace F2klabs\Digimind;
 
 use F2klabs\Digimind\request\Request;
+use F2klabs\Digimind\response\HowGraph;
 use F2klabs\Digimind\response\Mentions;
 use F2klabs\Digimind\response\WhatClassifications;
 use F2klabs\Digimind\response\WhatConcept;
@@ -89,6 +90,11 @@ class Digimind {
     public function whoConcept($options = [])
     {
 
+    }
+
+    public function howGraph($options = [])
+    {
+        return new HowGraph($this->_makeRequest('analysis/how', $options));
     }
 
 
