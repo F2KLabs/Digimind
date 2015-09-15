@@ -19,6 +19,8 @@ class HowGraph extends Response{
     public function __construct(GuzzleResponse $response)
     {
         parent::__construct($response);
+
+        //Set Up our sentiment values
         $this->sentiment();
     }
 
@@ -34,10 +36,9 @@ class HowGraph extends Response{
         //Get the Total for our Averages
         $total = $positive + $negative + $neutral;
 
-
-        $this->positive = ["total"=>$this->positive, "percentage"=>($this->positive/$total)*100];
-        $this->negative = ["total"=>$this->negative, "percentage"=>($this->negative/$total)*100];
-        $this->neutral  = ["total"=>$this->neutral,  "percentage"=>($this->neutral/$total) *100];
-
+        //Set our Values for later use
+        $this->positive = ["total"=>$positive, "percentage"=>($positive/$total)*100];
+        $this->negative = ["total"=>$negative, "percentage"=>($negative/$total)*100];
+        $this->neutral  = ["total"=>$neutral,  "percentage"=>($neutral/$total) *100];
     }
 }
