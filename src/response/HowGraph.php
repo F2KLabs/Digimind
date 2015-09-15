@@ -24,8 +24,20 @@ class HowGraph extends Response{
 
     public function sentiment()
     {
-        $contents = $this->getContents();
-        dd($contents);
-        $this->positive = $contents;
+        $series = $this->getContents()->series;
+
+        //Dig out the Values for our Sentiment
+        $positive = $series[0]->values[0]->count;
+        $negative = $series[1]->values[0]->count;
+        $neutral  = $series[2]->values[0]->count;
+
+        //Get the Total for our Averages
+        $total = $positive + $negative + $neutral;
+
+
+        $this->positive = ["total"=>$this->positive, "percentage"=>($this->positive/$total)*100];
+        $this->negative = ["total"=>$this->negative, "percentage"=>($this->negative/$total)*100];
+        $this->neutral  = ["total"=>$this->neutral,  "percentage"=>($this->neutral/$total) *100];
+
     }
 }
