@@ -26,8 +26,8 @@ class WhenGraph extends Response{
 
     protected function getChartStats(Array $data)
     {
-        $maximum = PHP_INT_MAX;
-        $minimum = 0;
+        $maximum = 0;
+        $minimum = PHP_INT_MAX;
         $average = 0;
         $total = 0;
 
@@ -39,7 +39,7 @@ class WhenGraph extends Response{
             if($dataPoint[1] > $maximum)
                 $maximum = $dataPoint[1];
 
-            if($minimum < $dataPoint[1])
+            if($dataPoint[1] < $minimum  )
             {
                 $minimum = $dataPoint[1];
             }
