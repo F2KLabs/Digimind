@@ -14,15 +14,18 @@ class Request {
 
 
     public $client;
+    public $base_uri;
 
     protected $digimindClientCode;
     protected $auth;
+
 
     public function __construct()
     {
         //Get the Digimind Client Code
         //$this->digimindClientCode = env("DIGIMIND_CLIENT_CODE", Config::get('digimind.client_code'));
         $this->digimindClientCode = "rd1";
+        $this->base_uri = "http://social.digimind.com/d/$this->digimindClientCode/api/";
 
         //Get our Auth Variables
         $this->auth = [
