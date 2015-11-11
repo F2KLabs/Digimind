@@ -12,9 +12,9 @@ use GuzzleHttp\Psr7\Response as GuzzleResponse;
 
 class HowGraph extends Response{
 
-    public $positive;
-    public $negative;
-    public $neutral;
+    public $positive = ["total"=>0, "percentage"=>0];
+    public $negative = ["total"=>0, "percentage"=>0];
+    public $neutral = ["total"=>0, "percentage"=>0];
 
     public function __construct(GuzzleResponse $response)
     {
@@ -26,19 +26,28 @@ class HowGraph extends Response{
 
     public function sentiment()
     {
+        $data = [];
+        $total = 0;
         $series = $this->getContents()->series;
 
-        //Dig out the Values for our Sentiment
-        $positive = $series[0]->values[0]->count;
-        $negative = $series[1]->values[0]->count;
-        $neutral  = $series[2]->values[0]->count;
+        foreach($series as $point)
+        {
+            if(sizeof($point->values)) {
+                $data[$point->title] = $point->values[0]->count;
+                $total += $point->values[0]->count;
+            }
 
-        //Get the Total for our Averages
-        $total = $positive + $negative + $neutral;
+        }
 
         //Set our Values for later use
-        $this->positive = ["total"=>$positive, "percentage"=>($positive/$total)*100];
-        $this->negative = ["total"=>$negative, "percentage"=>($negative/$total)*100];
-        $this->neutral  = ["total"=>$neutral,  "percentage"=>($neutral/$total) *100];
+        $this->positive = (array_key_exists('positive', $data))?
+            ["total"=>$data['positive'], "percentage"=>($data['positive']/$total)*100]
+            : $this->positive;
+        $this->negative = (array_key_exists('negative', $data))?
+            ["total"=>$data['negative'], "percentage"=>($data['negative']/$total)*100]
+            : $this->negative ;
+        $this->neutral  = (array_key_exists('neutral', $data))?
+            ["total"=>$data['neutral'],  "percentage"=>($data['neutral']/$total) *100]
+            : $this->neutral;
     }
 }
