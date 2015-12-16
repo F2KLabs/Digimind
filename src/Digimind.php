@@ -8,7 +8,7 @@
 
 namespace F2klabs\Digimind;
 
-use F2klabs\Digimind\request\Request;
+use F2klabs\Digimind\request\Request as DigiRequest;
 use F2klabs\Digimind\response\HowGraph;
 use F2klabs\Digimind\response\Mentions;
 use F2klabs\Digimind\response\WhatClassifications;
@@ -17,20 +17,21 @@ use F2klabs\Digimind\response\WhenGraph;
 use F2klabs\Digimind\response\WhereGeography;
 use F2klabs\Digimind\response\WhereMedia;
 use F2klabs\Digimind\response\WhoGraph;
+use F2klabs\Digimind\response\Topics;
 use GuzzleHttp\Exception\ClientException;
 
 class Digimind {
 
-    protected $request;
+    protected $digiRequest;
 
-    public function __construct(Request $request)
+    public function __construct(DigiRequest $request)
     {
-        $this->request = $request;
+        $this->digiRequest = $request;
     }
 
     public function mentions($options = [], $filters = [])
     {
-        return new Mentions($this->_makeRequest('mentions', $options, $filters));
+        return new Mentions($this->digiRequest->call('mentions', $options, $filters));
     }
 
     /**
@@ -40,7 +41,7 @@ class Digimind {
      */
     public function whatConcept($options = [], $filters = [])
     {
-        return new WhatConcept($this->_makeRequest('analysis/what/concept', $options, $filters));
+        return new WhatConcept($this->digiRequest->call('analysis/what/concept', $options, $filters));
     }
 
     /**
@@ -50,7 +51,7 @@ class Digimind {
      */
     public function whatClassification($options = [], $filters = [])
     {
-        return new WhatClassifications($this->_makeRequest('analysis/what/classifications', $options, $filters));
+        return new WhatClassifications($this->digiRequest->call('analysis/what/classifications', $options, $filters));
         //return json_decode($response->getBody()->getContents());
     }
 
@@ -61,7 +62,7 @@ class Digimind {
      */
     public function whereMedia($options = [], $filters = [])
     {
-        return new WhereMedia($this->_makeRequest('analysis/where/media', $options, $filters));
+        return new WhereMedia($this->digiRequest->call('analysis/where/media', $options, $filters));
     }
 
     /**
@@ -71,7 +72,7 @@ class Digimind {
      */
     public function whereGeography($options = [], $filters = [])
     {
-        return new WhereGeography($this->_makeRequest('analysis/where/geography', $options, $filters));
+        return new WhereGeography($this->digiRequest->call('analysis/where/geography', $options, $filters));
     }
 
     /**
@@ -81,7 +82,7 @@ class Digimind {
      */
     public function whenGraph($options = ['frequency'=>"DAILY"], $filters = [])
     {
-        return new WhenGraph($this->_makeRequest('analysis/when', $options, $filters));
+        return new WhenGraph($this->digiRequest->call('analysis/when', $options, $filters));
     }
 
     /**
@@ -91,7 +92,7 @@ class Digimind {
      */
     public function whoGraph($options = [], $filters = [])
     {
-        return new WhoGraph($this->_makeRequest('analysis/who', $options, $filters));
+        return new WhoGraph($this->digiRequest->call('analysis/who', $options, $filters));
     }
 
     /**
@@ -110,38 +111,13 @@ class Digimind {
      */
     public function howGraph($options = [], $filters = [])
     {
-        return new HowGraph($this->_makeRequest('analysis/how', $options, $filters));
+        return new HowGraph($this->digiRequest->call('analysis/how', $options, $filters));
     }
 
-    /**
-     * @param $uri
-     * @param $options
-     * @param array $filters
-     * @return mixed
-     */
-    private function _makeRequest($uri, $options, $filters = [])
+    public function topic($id)
     {
-        $uri = $this->request->base_uri . $uri . "?" . http_build_query($options) . $this->_buildFilters($filters, $options);
-        return $this->request->client->request('GET', $uri);
+        return new Topics($this->digiRequest->call('topic/'.$id));
     }
 
-    /**
-     * @param array $filters
-     * @param array $options
-     * @return string
-     */
-    private function _buildFilters(Array $filters, Array $options)
-    {
-        // Check if we already have some query string options in the string we'll be concatenating to via it's
-        // options array.
-        $filterStr = (sizeOf($options) > 0)? "&" : "";
 
-        if(sizeOf($filters) > 0) {
-            foreach ($filters as $key => $val) {
-                $filterStr .= "filter=" . $key . ":" . urlencode($val) . "&";
-            }
-        }
-
-        return rtrim($filterStr, "&");
-    }
 }

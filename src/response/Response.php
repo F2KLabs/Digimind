@@ -61,4 +61,9 @@ class Response {
 
         return $key;
     }
+
+    public static function decodeContents(GuzzleResponse $response)
+    {
+        return json_decode($response->getBody()->getContents());
+    }
 }

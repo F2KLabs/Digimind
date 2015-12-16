@@ -23,8 +23,8 @@ class Request {
     public function __construct()
     {
         //Get the Digimind Client Code
-        //$this->digimindClientCode = env("DIGIMIND_CLIENT_CODE", Config::get('digimind.client_code'));
-        $this->digimindClientCode = "rd1";
+        $this->digimindClientCode = env("DIGIMIND_CLIENT_CODE", config('digimind.client_code'));
+        
         $this->base_uri = "http://social.digimind.com/d/$this->digimindClientCode/api/";
 
         //Get our Auth Variables
@@ -43,5 +43,37 @@ class Request {
     public function getAuth()
     {
         return $this->auth;
+    }
+
+    /**
+     * @param $uri
+     * @param array $options
+     * @param array $filters
+     * @return mixed
+     */
+    public function call($uri, $options = [], $filters = [])
+    {
+        $uri = $this->base_uri . $uri . "?" . http_build_query($options) . $this->_buildFilters($filters, $options);
+        return $this->client->request('GET', $uri);
+    }
+
+    /**
+     * @param array $filters
+     * @param array $options
+     * @return string
+     */
+    private function _buildFilters(Array $filters, Array $options)
+    {
+        // Check if we already have some query string options in the string we'll be concatenating to via it's
+        // options array.
+        $filterStr = (sizeOf($options) > 0)? "&" : "";
+
+        if(sizeOf($filters) > 0) {
+            foreach ($filters as $key => $val) {
+                $filterStr .= "filter=" . $key . ":" . urlencode($val) . "&";
+            }
+        }
+
+        return rtrim($filterStr, "&");
     }
 }
