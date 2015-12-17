@@ -30,6 +30,7 @@ class TopicList extends  Model{
 
             foreach ($this->entities as $key=>$val) {
                 $this->entities[$key] = new ListEntity($val);
+                $this->entities[$key]->listId = $this->id;
             }
         }
 
