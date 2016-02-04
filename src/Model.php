@@ -21,12 +21,12 @@ class Model {
         $this->client  = new Digimind($this->request);
     }
 
-    private function __get($key)
+    public function __get($key)
     {
         return $this->attributes->$key;
     }
 
-    private function __set($key,$val)
+    public function __set($key,$val)
     {
         $this->attributes->$key = $val;
     }
